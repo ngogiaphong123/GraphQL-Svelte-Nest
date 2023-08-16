@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type GetMeResponse {
+  user: User
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -13,12 +17,19 @@ type LoginResponse {
   user: User!
 }
 
+type LogoutResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type Mutation {
   login(LoginInput: LoginInput!): LoginResponse!
+  logout: LogoutResponse!
   register(RegisterInput: RegisterInput!): RegisterResponse!
 }
 
 type Query {
+  getMe: GetMeResponse!
   hello: String!
 }
 

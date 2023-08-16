@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { Payload } from './types/payload.type';
-import { Roles } from '../common/enum/roles.enum';
+import { Role } from '../common/enum/roles.enum';
 import { LoginInput } from './dto/login.input';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class AuthService {
         });
         const role = await this.prisma.role.findUnique({
             where: {
-                title: Roles.USER,
+                title: Role.USER,
             },
         });
         await this.prisma.hasRole.create({
@@ -46,7 +46,7 @@ export class AuthService {
             userId: user.userId,
             username: user.username,
             email: user.email,
-            roles: [Roles.USER],
+            roles: [Role.USER],
         };
         const tokens = await this.generateTokens(payload);
         await this.updateRefreshToken(user.userId, tokens.refreshToken);
@@ -56,7 +56,7 @@ export class AuthService {
                 userId: user.userId,
                 username: user.username,
                 email: user.email,
-                roles: [Roles.USER],
+                roles: [Role.USER],
             },
         };
     }
@@ -99,7 +99,7 @@ export class AuthService {
             userId: user.userId,
             username: user.username,
             email: user.email,
-            roles: user.roles.map((role) => role.role.title) as Roles[],
+            roles: user.roles.map((role) => role.role.title) as Role[],
         };
         const tokens = await this.generateTokens(payload);
         await this.updateRefreshToken(user.userId, tokens.refreshToken);
@@ -109,8 +109,23 @@ export class AuthService {
                 userId: user.userId,
                 username: user.username,
                 email: user.email,
-                roles: user.roles.map((role) => role.role.title) as Roles[],
+                roles: user.roles.map((role) => role.role.title) as Role[],
             },
+        };
+    }
+
+    async logout(userId: string) {
+        await this.prisma.user.update({
+            where: {
+                userId: userId,
+            },
+            data: {
+                refreshToken: null,
+            },
+        });
+        return {
+            accessToken: '',
+            refreshToken: '',
         };
     }
 

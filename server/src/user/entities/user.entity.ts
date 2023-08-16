@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Roles } from '../../common/enum/roles.enum';
+import { Role } from '../../common/enum/roles.enum';
 
 @ObjectType()
 export class User {
@@ -13,5 +13,5 @@ export class User {
     email: string;
 
     @Field(() => [String])
-    roles: Roles[];
+    roles: Role[];
 }

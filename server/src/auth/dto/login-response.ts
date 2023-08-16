@@ -15,7 +15,6 @@ export class LoginResponse {
     refreshToken: string;
 
     @IsNotEmpty()
-    @IsString()
     @Field()
     user: User;
 }
