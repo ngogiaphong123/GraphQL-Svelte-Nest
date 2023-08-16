@@ -6,6 +6,10 @@ type GetMeResponse {
   user: User
 }
 
+type GetUsersResponse {
+  users: [User!]!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -29,6 +33,7 @@ type Mutation {
 }
 
 type Query {
+  findAll: GetUsersResponse!
   getMe: GetMeResponse!
   hello: String!
 }
