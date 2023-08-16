@@ -6,7 +6,7 @@ import { RegisterResponse } from './dto/register-response';
 import { LoginResponse } from './dto/login-response';
 import { LoginInput } from './dto/login.input';
 import { GetMeResponse } from './dto/get-me-response';
-import { UseGuards } from '@nestjs/common';
+import { Req, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from '../common/guard/jwt.guard';
 import { GetCurrentUser } from '../common/decorators/current-user.decorator';
 import { Payload } from './types/payload.type';

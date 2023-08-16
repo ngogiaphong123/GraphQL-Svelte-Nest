@@ -2,8 +2,15 @@
 // for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
-		// interface Locals {}
+		interface Error {
+			code: number;
+			message: string;
+		}
+		interface Locals {
+			graphql: any;
+			user: any;
+			accessToken: string | undefined;
+		}
 		// interface PageData {}
 		// interface Platform {}
 	}
