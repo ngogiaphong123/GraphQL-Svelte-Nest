@@ -1,13 +1,15 @@
-<script>
+<script lang="ts">
 	import { enhance } from '$app/forms';
 	import { GradientButton, Input, Label } from 'flowbite-svelte';
 	export let form;
+
+	let errorMessage: any;
 
 	$: {
 		if (form?.isSuccessful) {
 			window.location.href = '/';
 		} else {
-			console.log(form);
+			errorMessage = form?.errors[0]?.message;
 		}
 	}
 </script>
@@ -24,6 +26,11 @@
 				};
 			}}
 		>
+			{#if errorMessage}
+				<div class="text-red-500">
+					<p>{errorMessage}</p>
+				</div>
+			{/if}
 			<div class="">
 				<Label for="email" class="block mb-2">Email:</Label>
 				<Input id="email" name="email" size="lg" type="text" placeholder="Email" />

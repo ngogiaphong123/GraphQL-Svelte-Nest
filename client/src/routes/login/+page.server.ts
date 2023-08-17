@@ -19,16 +19,16 @@ export const actions: Actions = {
 				}
 			}
 		`;
-		try {
-			const { data }: any = await graphQLClient.mutate({
-				mutation,
-				variables: {
-					input: {
-						email: inputData.get('email'),
-						password: inputData.get('password')
-					}
+		const { data, errors } = await graphQLClient.mutate({
+			mutation,
+			variables: {
+				input: {
+					email: inputData.get('email'),
+					password: inputData.get('password')
 				}
-			});
+			}
+		});
+		if (!errors) {
 			cookies.set('accessToken', data.login.accessToken, {
 				path: '/'
 			});
@@ -38,11 +38,10 @@ export const actions: Actions = {
 			return {
 				isSuccessful: true
 			};
-		} catch (error: any) {
-			return {
-				isSuccessful: false,
-				errors: error.response.errors
-			};
 		}
+		return {
+			isSuccessful: false,
+			errors: errors
+		};
 	}
 };
