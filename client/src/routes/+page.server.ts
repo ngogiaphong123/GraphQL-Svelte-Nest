@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request';
+import { gql } from '@apollo/client/core';
 import type { PageServerLoad } from './$types';
 import { graphQLClient } from '../lib/graphql/queries';
 
@@ -16,8 +16,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 				}
 			}
 		`;
-		graphQLClient.setHeader('authorization', `Bearer ${locals.accessToken}`);
-		const data: any = await graphQLClient.request(query);
+		const { data } = await graphQLClient.query({
+			query: query,
+			context: {
+				headers: {
+					authorization: `Bearer ${locals.accessToken}`
+				}
+			}
+		});
 		return {
 			props: {
 				users: data.findAll.users

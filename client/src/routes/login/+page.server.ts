@@ -1,10 +1,10 @@
+import { gql } from '@apollo/client/core';
 import type { Actions } from '@sveltejs/kit';
-import { gql } from 'graphql-request';
 import { graphQLClient } from '../../lib/graphql/queries';
 
 export const actions: Actions = {
 	login: async ({ request, cookies }) => {
-		const data = await request.formData();
+		const inputData = await request.formData();
 		const mutation = gql`
 			mutation Login($input: LoginInput!) {
 				login(LoginInput: $input) {
@@ -20,16 +20,19 @@ export const actions: Actions = {
 			}
 		`;
 		try {
-			const result: any = await graphQLClient.request(mutation, {
-				input: {
-					email: data.get('email'),
-					password: data.get('password')
+			const { data }: any = await graphQLClient.mutate({
+				mutation,
+				variables: {
+					input: {
+						email: inputData.get('email'),
+						password: inputData.get('password')
+					}
 				}
 			});
-			cookies.set('accessToken', result.login.accessToken, {
+			cookies.set('accessToken', data.login.accessToken, {
 				path: '/'
 			});
-			cookies.set('refreshToken', result.login.refreshToken, {
+			cookies.set('refreshToken', data.login.refreshToken, {
 				path: '/'
 			});
 			return {

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Icon from '@iconify/svelte';
 
 	const contactIcons = [
@@ -27,41 +27,23 @@
 	<div
 		class="flex md:flex-row flex-col justify-between items-center border-t pt-2 w-full md:text-base text-sm"
 	>
-		<div class="ak-bar-item ak-footer-copyright">
-			Hehe
-		</div>
+		<div class="ak-bar-item ak-footer-copyright">Hehe</div>
 		<div class="p-2">
 			<ul
 				id="menu-footer-navigation"
 				class="flex flex-row justify-between items-center gap-4"
 			>
 				<li class="menu-item relative">
-					<a
-						href="#"
-						on:click={() => {
-						}}><span>Hehe</span></a
-					>
+					<a href="#" on:click={() => {}}><span>Hehe</span></a>
 				</li>
 				<li class="menu-item relative">
-					<a
-						href="#"
-						on:click={() => {
-						}}><span> Hehe</span></a
-					>
+					<a href="#" on:click={() => {}}><span> Hehe</span></a>
 				</li>
 				<li class="menu-item relative">
-					<a
-						href="#"
-						on:click={() => {
-						}}><span>Hehe</span></a
-					>
+					<a href="#" on:click={() => {}}><span>Hehe</span></a>
 				</li>
 				<li class="menu-item relative">
-					<a
-						href="#"
-						on:click={() => {
-						}}><span>Hehe</span></a
-					>
+					<a href="#" on:click={() => {}}><span>Hehe</span></a>
 				</li>
 			</ul>
 		</div>

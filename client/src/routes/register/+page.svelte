@@ -37,7 +37,7 @@
 		>
 			<div class="">
 				<Label for="email" class="block mb-2">Email:</Label>
-				<Input id="email" name="email" size="lg" type="email" placeholder="Email" />
+				<Input id="email" name="email" size="lg" type="text" placeholder="Email" />
 			</div>
 			<div class="">
 				<Label for="username" class="block mb-2">Username:</Label>

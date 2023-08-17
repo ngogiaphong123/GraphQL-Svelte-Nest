@@ -1,5 +1,5 @@
+import { gql } from '@apollo/client/core';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
-import { GraphQLClient, gql } from 'graphql-request';
 import { graphQLClient } from './lib/graphql/queries';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -22,8 +22,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	`;
 	try {
-		graphQLClient.setHeader('authorization', `Bearer ${event.locals.accessToken}`);
-		const data: any = await graphQLClient.request(query);
+		const { data } = await graphQLClient.query({
+			query: query,
+			context: {
+				headers: {
+					authorization: `Bearer ${event.locals.accessToken}`
+				}
+			}
+		});
 		event.locals.user = data.getMe.user;
 		if (!event.locals.user) {
 			event.locals.accessToken = undefined;
