@@ -7,7 +7,6 @@ declare global {
 			message: string;
 		}
 		interface Locals {
-			graphql: any;
 			user: any;
 			accessToken: string | undefined;
 		}

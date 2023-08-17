@@ -1,5 +1,6 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { GraphQLClient, gql } from 'graphql-request';
+import { graphQLClient } from './lib/graphql/queries';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.accessToken = event.cookies.get('accessToken');
@@ -8,12 +9,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.user = undefined;
 		return await resolve(event);
 	}
-	const client = new GraphQLClient('http://localhost:8080/graphql', {
-		headers: {
-			authorization: `Bearer ${event.locals.accessToken}`
-		}
-	});
-	event.locals.graphql = client;
 	const query = gql`
 		query GetMe {
 			getMe {
@@ -27,7 +22,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	`;
 	try {
-		const data: any = await client.request(query);
+		graphQLClient.setHeader('authorization', `Bearer ${event.locals.accessToken}`);
+		const data: any = await graphQLClient.request(query);
 		event.locals.user = data.getMe.user;
 		if (!event.locals.user) {
 			event.locals.accessToken = undefined;

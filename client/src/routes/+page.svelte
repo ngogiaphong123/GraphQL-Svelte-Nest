@@ -12,8 +12,8 @@
 </script>
 
 {#if data.user}
-	<div class="flex justify-center">
-		<Card padding="sm">
+	<div class="flex justify-center w-full">
+		<Card padding="sm" class="h-fit">
 			<div class="flex flex-col items-center pb-4">
 				<Avatar
 					size="lg"
@@ -38,7 +38,7 @@
 			</div>
 		</Card>
 	</div>
-	<Modal title="Terms of Service" bind:open={clickOutsideModal} autoclose outsideclose>
+	<Modal title="Users in system" bind:open={clickOutsideModal} autoclose outsideclose>
 		{#if data.props.users}
 			{#each data.props.users as user}
 				<h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
@@ -53,7 +53,7 @@
 		</svelte:fragment>
 	</Modal>
 {:else}
-	<div class="flex justify-center">
+	<div class="flex w-full justify-center">
 		<div>
 			<h1>Welcome, guest</h1>
 			<p>You are not logged in.</p>
