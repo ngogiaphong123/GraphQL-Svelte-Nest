@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { PubSub } from 'graphql-subscriptions';
 
 @Module({
     imports: [
@@ -14,12 +15,20 @@ import { ConfigModule } from '@nestjs/config';
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             sortSchema: true,
+            subscriptions: {
+                'graphql-ws': true,
+            },
         }),
         PrismaModule,
         AuthModule,
         UserModule,
     ],
     controllers: [],
-    providers: [],
+    providers: [
+        {
+            provide: 'PUB_SUB',
+            useValue: new PubSub(),
+        },
+    ],
 })
 export class AppModule {}

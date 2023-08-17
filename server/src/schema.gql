@@ -50,6 +50,11 @@ type RegisterResponse {
   user: User!
 }
 
+type Subscription {
+  hello: String!
+  newUserRegistered: User!
+}
+
 type User {
   email: String!
   roles: [String!]!
