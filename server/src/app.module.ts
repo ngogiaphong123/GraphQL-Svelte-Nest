@@ -6,7 +6,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { PubSub } from 'graphql-subscriptions';
 
 @Module({
     imports: [
@@ -24,11 +23,6 @@ import { PubSub } from 'graphql-subscriptions';
         UserModule,
     ],
     controllers: [],
-    providers: [
-        {
-            provide: 'PUB_SUB',
-            useValue: new PubSub(),
-        },
-    ],
+    providers: [],
 })
 export class AppModule {}

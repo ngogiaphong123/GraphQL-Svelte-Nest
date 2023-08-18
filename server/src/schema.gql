@@ -35,7 +35,6 @@ type Mutation {
 type Query {
   findAll: GetUsersResponse!
   getMe: GetMeResponse!
-  hello: String!
 }
 
 input RegisterInput {
@@ -51,8 +50,7 @@ type RegisterResponse {
 }
 
 type Subscription {
-  hello: String!
-  newUserRegistered: User!
+  userCreated: User!
 }
 
 type User {
