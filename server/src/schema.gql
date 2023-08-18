@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CheckValidTokenInput {
+  token: String!
+}
+
+type CheckValidTokenResponse {
+  message: String!
+  status: Boolean!
+}
+
 type GetMeResponse {
   user: User
 }
@@ -29,12 +38,23 @@ type LogoutResponse {
 type Mutation {
   login(LoginInput: LoginInput!): LoginResponse!
   logout: LogoutResponse!
+  refreshToken(refreshToken: RefreshTokenInput!): RefreshTokenResponse!
   register(RegisterInput: RegisterInput!): RegisterResponse!
 }
 
 type Query {
+  checkValidToken(token: CheckValidTokenInput!): CheckValidTokenResponse!
   findAll: GetUsersResponse!
   getMe: GetMeResponse!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+type RefreshTokenResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 input RegisterInput {

@@ -13,6 +13,10 @@ import { Payload } from './types/payload.type';
 import { LogoutResponse } from './dto/logout-response';
 import { User } from '../user/entities/user.entity';
 import { PubSub } from 'graphql-subscriptions';
+import { RefreshTokenResponse } from './dto/refresh-response';
+import { RefreshTokenInput } from './dto/refresh-input';
+import { CheckValidTokenResponse } from './dto/check-valid-token-response';
+import { CheckValidTokenInput } from './dto/check-valid-token-input';
 const pubSub = new PubSub();
 
 @Resolver(() => Auth)
@@ -49,5 +53,23 @@ export class AuthResolver {
     @UseGuards(LocalAuthGuard)
     async logout(@GetCurrentUser() payload: Payload) {
         return await this.authService.logout(payload.userId);
+    }
+
+    @Mutation(() => RefreshTokenResponse)
+    async refreshToken(
+        @Args('refreshToken') refreshTokenInput: RefreshTokenInput,
+    ) {
+        return await this.authService.refreshTokens(
+            refreshTokenInput.refreshToken,
+        );
+    }
+
+    @Query(() => CheckValidTokenResponse)
+    async checkValidToken(
+        @Args('token') checkValidTokenInput: CheckValidTokenInput,
+    ) {
+        return await this.authService.checkValidToken(
+            checkValidTokenInput.token,
+        );
     }
 }

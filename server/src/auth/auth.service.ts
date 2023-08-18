@@ -6,6 +6,7 @@ import * as argon2 from 'argon2';
 import { Payload } from './types/payload.type';
 import { Role } from '../common/enum/roles.enum';
 import { LoginInput } from './dto/login.input';
+import { JwtError } from '../common/error/jwtError.enum';
 
 @Injectable()
 export class AuthService {
@@ -129,6 +130,82 @@ export class AuthService {
         };
     }
 
+    async refreshTokens(refreshToken: string) {
+        try {
+            const payload = await this.verifyToken(refreshToken);
+            const user = await this.prisma.user.findFirst({
+                where: {
+                    userId: payload.userId,
+                    refreshToken: refreshToken,
+                },
+                select: {
+                    email: true,
+                    userId: true,
+                    password: true,
+                    username: true,
+                    roles: {
+                        select: {
+                            role: {
+                                select: {
+                                    title: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            if (!user) {
+                throw new HttpException(
+                    'Invalid refresh token',
+                    HttpStatus.UNAUTHORIZED,
+                );
+            }
+            const newPayload: Payload = {
+                userId: user.userId,
+                username: user.username,
+                email: user.email,
+                roles: user.roles.map((role) => role.role.title) as Role[],
+            };
+            const tokens = await this.generateTokens(newPayload);
+            this.updateRefreshToken(user.userId, tokens.refreshToken);
+            return {
+                ...tokens,
+            };
+        } catch (error) {
+            throw new HttpException(
+                'Invalid refresh token',
+                HttpStatus.UNAUTHORIZED,
+            );
+        }
+    }
+
+    async checkValidToken(token: string) {
+        try {
+            const payload = await this.verifyToken(token);
+            if (!payload) {
+                return {
+                    status: false,
+                    message: JwtError.INVALID_TOKEN,
+                };
+            }
+            return {
+                status: true,
+                message: 'Valid token',
+            };
+        } catch (error: any) {
+            if (error.name === JwtError.TOKEN_EXPIRED_ERROR) {
+                return {
+                    status: false,
+                    message: JwtError.ACCESS_TOKEN_EXPIRED,
+                };
+            }
+            return {
+                status: false,
+                message: JwtError.INVALID_TOKEN,
+            };
+        }
+    }
+
     async hashData(data: string) {
         return await argon2.hash(data);
     }
@@ -150,6 +227,14 @@ export class AuthService {
         });
         return { accessToken, refreshToken };
     }
+
+    async verifyToken(token: string) {
+        return await this.jwt.verifyAsync(token, {
+            secret: process.env.JWT_SECRET,
+            publicKey: process.env.PUBLIC_KEY,
+        });
+    }
+
     async updateRefreshToken(userId: string, refreshToken: string) {
         await this.prisma.user.update({
             where: {
