@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client/core';
 import type { PageServerLoad } from './$types';
-import { graphQLClient } from '../lib/graphql/queries';
+import { graphQLClient } from '../lib/graphql/apollo';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user && locals.user.roles.includes('admin')) {

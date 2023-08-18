@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client/core';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
-import { graphQLClient } from './lib/graphql/queries';
+import { graphQLClient } from './lib/graphql/apollo';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.accessToken = event.cookies.get('accessToken');

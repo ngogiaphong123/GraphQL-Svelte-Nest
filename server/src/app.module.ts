@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
             sortSchema: true,
             subscriptions: {
                 'graphql-ws': true,
+                'subscriptions-transport-ws': true,
             },
         }),
         PrismaModule,

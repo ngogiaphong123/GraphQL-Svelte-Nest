@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client/core';
 import type { Actions } from '@sveltejs/kit';
-import { graphQLClient } from '../../lib/graphql/queries';
+import { graphQLClient } from '../../lib/graphql/apollo';
 
 export const actions: Actions = {
 	register: async ({ request, cookies }) => {

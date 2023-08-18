@@ -1,14 +1,41 @@
 <script lang="ts">
 	import { Avatar, Card, GradientButton } from 'flowbite-svelte';
 	import { Button, Modal } from 'flowbite-svelte';
+	import { createApolloClient, graphQLClient } from '../lib/graphql/apollo';
+	import { gql } from '@apollo/client/core';
+	import { onMount } from 'svelte';
+
 	export let data: any;
 	let roles = '';
 	let isAdmin = false;
 	let clickOutsideModal = false;
-	if (data.user) {
-		roles = data.user.roles.map((role: any) => role).join(', ');
-		isAdmin = data.user.roles.includes('admin');
-	}
+	onMount(() => {
+		const client = createApolloClient();
+		if (data.user) {
+			roles = data.user.roles.map((role: any) => role).join(', ');
+			isAdmin = data.user.roles.includes('admin');
+			if (isAdmin) {
+				client
+					.subscribe({
+						query: gql`
+							subscription Subscription {
+								userCreated {
+									username
+									email
+									roles
+									userId
+								}
+							}
+						`
+					})
+					.subscribe({
+						next: (data: any) => {
+							console.log(data);
+						}
+					});
+			}
+		}
+	});
 </script>
 
 {#if data.user}

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client/core';
-import { graphQLClient } from '../../../lib/graphql/queries';
+import { graphQLClient } from '../../../lib/graphql/apollo';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ cookies }) => {
